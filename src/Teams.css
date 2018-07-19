@@ -1,0 +1,18 @@
+.team-score {
+  font-size: 2em;
+}
+
+.team-score .badge {
+  cursor: default;
+  width: 100%;
+}
+
+.team-score .badge.active {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
