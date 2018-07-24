@@ -8,28 +8,32 @@ class App extends Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
-                    <div className="col">
-                        <nav className="navbar navbar-light bg-light justify-content-between">
-                            <a className="navbar-brand">Navbar</a>
-                            {this.state.user ? (
-                                <div className="form-inline">
-                                    <label className="col-form-label mr-2">{this.state.user.email}</label>
-                                    <button className="btn btn-primary" onClick={this.logout.bind(this)}>Logout</button>
-                                </div>
-                            ) : (
-                                <form className="form-inline" onSubmit={this.login.bind(this)}>
-                                    <input type="email" className="form-control mr-2" id="email" placeholder="Email" />
-                                    <input type="password" className="form-control mr-2" id="password" placeholder="Password" />
+            <div>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="/">Football team manager</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                                    <button type="submit" className="btn btn-primary">Login</button>
-                                </form>
-                            )}
-                        </nav>
+                    <div class="collapse navbar-collapse" id="main-menu">
+                        <ul className="navbar-nav mr-auto"></ul>
+                        {this.state.user ? (
+                            <div className="form-inline my-2 my-lg-0">
+                                <label className="navbar-text mr-2">{this.state.user.email}</label>
+                                <button className="btn btn-primary" onClick={this.logout.bind(this)}>Logout</button>
+                            </div>
+                        ) : (
+                            <form class="form-inline my-2 my-lg-0" onSubmit={this.login.bind(this)}>
+                                <input class="form-control mb-2 mb-md-0 mr-sm-2" id="email" type="email" placeholder="Email" aria-label="Email" />
+                                <input class="form-control mb-2 mb-md-0 mr-sm-2" id="password" type="password" placeholder="Password" aria-label="Password" />
+                                <button class="btn btn-primary my-2 my-sm-0" type="submit">Login</button>
+                            </form>
+                        )}
                     </div>
+                </nav>
+                <div className="container">
+                    <Matches canEdit={this.state.user !== null} />
                 </div>
-                <Matches canEdit={this.state.user !== null} />
             </div>
         );
     }

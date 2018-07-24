@@ -61,7 +61,7 @@ class App extends Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col">
-                                                    <Teams teams={match.teams} matchId={match.key} finalized={match.finalized} />
+                                                    <Teams teams={match.teams} matchId={match.key} finalized={match.finalized} canEdit={this.props.canEdit} />
                                                 </div>
                                             </div>
                                             <hr />

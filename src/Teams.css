@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.team-score .badge.active {
+.team-score .badge.active.editable {
   cursor: pointer;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
