@@ -25,7 +25,7 @@ class Teams extends Component {
                             -
                         </div>
                         <div className="col-4 team-score">
-                            <span className={"badge " + (this.props.finalized ? "badge-secondary" : "badge-primary active")} onClick={(e) => this.changeScore(1, e)}>{this.props.teams[1].score}</span>
+                            <span className={"badge " + (this.props.finalized ? "badge-secondary" : "badge-primary active") + (this.props.canEdit ? " editable" : "")} onClick={(e) => this.changeScore(1, e)}>{this.props.teams[1].score}</span>
                         </div>
                     </div>
                 </div>

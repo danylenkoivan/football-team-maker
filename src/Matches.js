@@ -8,7 +8,9 @@ import firebase from './utils/firebase';
 
 import moment from 'moment';
 
-class App extends Component {
+class Matches extends Component {
+
+    players = {};
 
     render() {
         return (
@@ -20,7 +22,7 @@ class App extends Component {
                                 <div className="row">
                                     <div className="col">
                                         <div className="input-group">
-                                            <input type="text" className="form-control" id="players" onChange={this.handleChange.bind(this)} placeholder="Player 1, Player 2, Player 3, Player 4" />
+                                            <input type="text" className="form-control" id="new-players" onChange={this.handleChange.bind(this)} placeholder="Player 1, Player 2, Player 3, Player 4" />
                                             <div className="input-group-append">
                                                 <button className="btn btn-success">Generate teams</button>
                                             </div>
@@ -32,7 +34,6 @@ class App extends Component {
                     </div>
                     <div className="row">
                         <div className="col col-lg-10 offset-lg-1 text-center">
-                            <h3>Matches</h3>
                             {this.state.matches.length === 0 ? (
                                 <div>
                                     <p>Couldn't find any...</p>
@@ -80,7 +81,7 @@ class App extends Component {
         super(props);
 
         this.state = {
-            players: "",
+            newPlayers: "",
             matches: []
         }
     }
@@ -91,9 +92,9 @@ class App extends Component {
         firebase.database().ref('matches/').orderByChild('created').on('value', (snapshot) => {
             var matches = [];
 
-            snapshot.forEach((user) => {
-                let data = user.val();
-                data.key = user.key
+            snapshot.forEach((match) => {
+                let data = match.val();
+                data.key = match.key
 
                 matches.push(data);
             });
@@ -103,13 +104,17 @@ class App extends Component {
     }
 
     handleChange(e) {
-        this.setState({ players: e.target.value });
+        this.setState({ newPlayers: e.target.value });
     }
 
     generateTeams(e) {
         e.preventDefault();
 
-        let playersList = this.state.players.split(',')
+        let playersList = this.state.newPlayers.split(',')
+
+        playersList = playersList.map(function (el) {
+            return el.trim();
+          });
 
         if (playersList.length >= 4) {
             for (let i = playersList.length - 1; i > 0; i--) {
@@ -131,15 +136,61 @@ class App extends Component {
                 created: new Date().getTime()
             })
 
-            document.getElementById("players").value = '';
+            this.setState({newPlayers: ''})
+            document.getElementById("new-players").value = '';
         }
     }
 
     finalizeScore(matchId) {
+        var _this = this
         if (window.confirm("Are you sure you want to lock this match's score?")) {
             firebase.database().ref('matches/' + matchId).update({finalized: true})
 
             let match = this.state.matches.find( matc => matc.key === matchId )
+
+            firebase.database().ref('players/').once('value', (snapshot) => {
+                snapshot.forEach((player) => {
+                    this.players[player.key] = player.val();
+                });
+            });
+
+            var participatingPlayers = [];
+
+            match.teams[0].players.forEach(function (player) {
+                if (match.teams[0].score > match.teams[1].score) {
+                    participatingPlayers.push({
+                        'player': player,
+                        'result': 'won'
+                    });
+                } else {
+                    participatingPlayers.push({
+                        'player': player,
+                        'result': 'lost'
+                    });
+                }
+            })
+
+            match.teams[1].players.forEach(function (player) {
+                if (match.teams[1].score > match.teams[0].score) {
+                    participatingPlayers.push({
+                        'player': player,
+                        'result': 'won'
+                    });
+                } else {
+                    participatingPlayers.push({
+                        'player': player,
+                        'result': 'lost'
+                    });
+                }
+            })
+
+            participatingPlayers.forEach(function (data) {
+                if (data.result === 'won') {
+                    _this.playerWon(data.player);
+                } else if (data.result === 'lost') {
+                    _this.playerLost(data.player);
+                }
+            })
 
             if (
                 (match.teams[0].score === 10 && match.teams[1].score === 0) ||
@@ -147,6 +198,22 @@ class App extends Component {
             ) {
                 this.showFlawless();
             }
+        }
+    }
+
+    playerWon(playerName) {
+        if (this.players[playerName] !== undefined) {
+            firebase.database().ref('players/' + playerName).update({won: this.players[playerName].won + 1, lost: this.players[playerName].lost})
+        } else {
+            firebase.database().ref('players/' + playerName).set({won: 1, lost: 0})
+        }
+    }
+
+    playerLost(playerName) {
+        if (this.players[playerName] !== undefined) {
+            firebase.database().ref('players/' + playerName).update({won: this.players[playerName].won, lost: this.players[playerName].lost + 1})
+        } else {
+            firebase.database().ref('players/' + playerName).set({won: 0, lost: 1})
         }
     }
 
@@ -167,4 +234,4 @@ class App extends Component {
 
 }
 
-export default App;
+export default Matches;
