@@ -202,6 +202,7 @@ class Matches extends Component {
     }
 
     playerWon(playerName) {
+        playerName = playerName.toUpperCase()
         if (this.players[playerName] !== undefined) {
             firebase.database().ref('players/' + playerName).update({won: this.players[playerName].won + 1, lost: this.players[playerName].lost})
         } else {
@@ -210,6 +211,7 @@ class Matches extends Component {
     }
 
     playerLost(playerName) {
+        playerName = playerName.toUpperCase()
         if (this.players[playerName] !== undefined) {
             firebase.database().ref('players/' + playerName).update({won: this.players[playerName].won, lost: this.players[playerName].lost + 1})
         } else {

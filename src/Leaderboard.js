@@ -53,7 +53,7 @@ class Leaderboard extends Component {
                 let data = player.val();
                 data.key = player.key
 
-                data.victory_percent = (data.won / (data.won + data.lost)).toFixed(2) * 100
+                data.victory_percent = Math.round((data.won / (data.won + data.lost)) * 100)
 
                 players.push(data);
             });

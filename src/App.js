@@ -10,7 +10,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
                     <a className="navbar-brand" href="/">Football team manager</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
