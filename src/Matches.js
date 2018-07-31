@@ -16,22 +16,24 @@ class Matches extends Component {
         return (
             <div className="row">
                 <div className="col">
-                    <div className="row">
-                        <div className="col">
-                            <form className="form mt-4 mb-4" onSubmit={this.generateTeams.bind(this)}>
-                                <div className="row">
-                                    <div className="col">
-                                        <div className="input-group">
-                                            <input type="text" className="form-control" id="new-players" onChange={this.handleChange.bind(this)} placeholder="Player 1, Player 2, Player 3, Player 4" />
-                                            <div className="input-group-append">
-                                                <button className="btn btn-success">Generate teams</button>
+                    {this.props.canEdit === true &&
+                        <div className="row">
+                            <div className="col">
+                                <form className="form mt-4 mb-4" onSubmit={this.generateTeams.bind(this)}>
+                                    <div className="row">
+                                        <div className="col">
+                                            <div className="input-group">
+                                                <input type="text" className="form-control" id="new-players" onChange={this.handleChange.bind(this)} placeholder="Player 1, Player 2, Player 3, Player 4" />
+                                                <div className="input-group-append">
+                                                    <button className="btn btn-success">Generate teams</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div className="row">
                         <div className="col col-lg-10 offset-lg-1 text-center">
                             {this.state.matches.length === 0 ? (
@@ -110,34 +112,36 @@ class Matches extends Component {
     generateTeams(e) {
         e.preventDefault();
 
-        let playersList = this.state.newPlayers.split(',')
+        if (this.props.canEdit) {
+            let playersList = this.state.newPlayers.split(',')
 
-        playersList = playersList.map(function (el) {
-            return el.trim();
-          });
+            playersList = playersList.map(function (el) {
+                return el.trim();
+            });
 
-        if (playersList.length >= 4) {
-            for (let i = playersList.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [playersList[i], playersList[j]] = [playersList[j], playersList[i]];
+            if (playersList.length >= 4) {
+                for (let i = playersList.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [playersList[i], playersList[j]] = [playersList[j], playersList[i]];
+                }
+
+                let teams = []
+
+                for (let i = 0; i < playersList.length; i += 2) {
+                    teams.push({
+                        players: playersList.slice(i, i + 2),
+                        score: 0
+                    });
+                }
+
+                firebase.database().ref("matches").push({
+                    teams: teams,
+                    created: new Date().getTime()
+                })
+
+                this.setState({newPlayers: ''})
+                document.getElementById("new-players").value = '';
             }
-
-            let teams = []
-
-            for (let i = 0; i < playersList.length; i += 2) {
-                teams.push({
-                    players: playersList.slice(i, i + 2),
-                    score: 0
-                });
-            }
-
-            firebase.database().ref("matches").push({
-                teams: teams,
-                created: new Date().getTime()
-            })
-
-            this.setState({newPlayers: ''})
-            document.getElementById("new-players").value = '';
         }
     }
 

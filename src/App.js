@@ -34,11 +34,11 @@ class App extends Component {
                 </nav>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-12 col-lg-8">
+                        <div className="col-12 col-xl-8">
                             <h3 className="text-center">Matches</h3>
                             <Matches canEdit={this.state.user !== null} />
                         </div>
-                        <div className="col-12 col-lg-4">
+                        <div className="col-12 col-xl-4">
                             <h3 className="text-center">Players</h3>
                             <Leaderboard />
                         </div>

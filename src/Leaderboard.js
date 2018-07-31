@@ -58,7 +58,7 @@ class Leaderboard extends Component {
                 players.push(data);
             });
 
-            _this.setState({ players: players.sort((a, b) => a.key.localeCompare(b.key)) })
+            _this.setState({ players: players.sort((a, b) => a.victory_percent < b.victory_percent) })
         });
     }
 }
