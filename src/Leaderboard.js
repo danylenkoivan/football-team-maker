@@ -15,7 +15,7 @@ class Leaderboard extends Component {
                                 <td>Name</td>
                                 <td>Won</td>
                                 <td>Lost</td>
-                                <td></td>
+                                <td>SAFF Rating</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,7 +25,7 @@ class Leaderboard extends Component {
                                     <td>{player.key}</td>
                                     <td>{player.won}</td>
                                     <td>{player.lost}</td>
-                                    <td>{player.victory_percent} %</td>
+                                    <td>{player.victory_score}</td>
                                 </tr>
                             )}
                         </tbody>
@@ -53,12 +53,12 @@ class Leaderboard extends Component {
                 let data = player.val();
                 data.key = player.key
 
-                data.victory_percent = Math.round((data.won / (data.won + data.lost)) * 100)
+                data.victory_score = Math.round(((data.won * (data.won / (data.won + data.lost))) * 100), 0)
 
                 players.push(data);
             });
 
-            _this.setState({ players: players.sort((a, b) => a.victory_percent < b.victory_percent) })
+            _this.setState({ players: players.sort((a, b) => a.victory_score < b.victory_score) })
         });
     }
 }
