@@ -8,6 +8,7 @@ class Leaderboard extends Component {
         return (
             <div className="row">
                 <div className="col">
+                    <h3 className="text-center">Players</h3>
                     <table className="table table-striped">
                         <thead>
                             <tr>

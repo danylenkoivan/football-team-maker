@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
-import './Matches.css';
-
 import Teams from './Teams';
 
 import firebase from './utils/firebase';
-
 import moment from 'moment';
+
+import './Matches.css';
 
 class Matches extends Component {
 
@@ -15,65 +14,44 @@ class Matches extends Component {
     render() {
         return (
             <div className="row">
-                <div className="col">
-                    {this.props.canEdit === true &&
-                        <div className="row">
-                            <div className="col">
-                                <form className="form mt-4 mb-4" onSubmit={this.generateTeams.bind(this)}>
+                <div className="col col-lg-10 offset-lg-1 text-center">
+                    <h3 className="text-center">Matches</h3>
+                    {this.state.matches.length === 0 ? (
+                        <div>
+                            <p>Couldn't find any...</p>
+                            <img className="img-fluid" src="https://media.giphy.com/media/5j4wozAB0iC4w/giphy.gif" alt="" />
+                        </div>
+                    ) : (
+                        this.state.matches.map((match, i) =>
+                            <div className="row" key={i}>
+                                <div className="col-12">
+                                    <div className="row mb-3">
+                                        <div className="col-12">
+                                            <h5 className="d-inline mr-2">
+                                                {moment(match.created).format('D MMMM YYYY, HH:mm')}
+                                            </h5>
+
+                                            { match.finalized !== true ? (
+                                                <span>
+                                                    {this.props.canEdit === true && (
+                                                        <span className="text-primary lock-score" onClick={(e) => this.finalizeScore(match.key)}>Lock the score</span>
+                                                    )}
+                                                </span>
+                                            ) : (
+                                                <span>(Finished)</span>
+                                            )}
+                                        </div>
+                                    </div>
                                     <div className="row">
                                         <div className="col">
-                                            <div className="input-group">
-                                                <input type="text" className="form-control" id="new-players" onChange={this.handleChange.bind(this)} placeholder="Player 1, Player 2, Player 3, Player 4" />
-                                                <div className="input-group-append">
-                                                    <button className="btn btn-success">Generate teams</button>
-                                                </div>
-                                            </div>
+                                            <Teams teams={match.teams} matchId={match.key} finalized={match.finalized} canEdit={this.props.canEdit} />
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                    }
-                    <div className="row">
-                        <div className="col col-lg-10 offset-lg-1 text-center">
-                            {this.state.matches.length === 0 ? (
-                                <div>
-                                    <p>Couldn't find any...</p>
-                                    <img className="img-fluid" src="https://media.giphy.com/media/5j4wozAB0iC4w/giphy.gif" alt="" />
+                                    <hr />
                                 </div>
-                            ) : (
-                                this.state.matches.map((match, i) =>
-                                    <div className="row" key={i}>
-                                        <div className="col-12">
-                                            <div className="row mb-3">
-                                                <div className="col-12">
-                                                    <h5 className="d-inline mr-2">
-                                                        {moment(match.created).format('D MMMM YYYY, HH:mm')}
-                                                    </h5>
-
-                                                    { match.finalized !== true ? (
-                                                        <span>
-                                                            {this.props.canEdit === true &&
-                                                                (<a className="text-primary lock-score" onClick={(e) => this.finalizeScore(match.key)}>Finish</a>)
-                                                            }
-                                                        </span>
-                                                    ) : (
-                                                        <span>(Finished)</span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col">
-                                                    <Teams teams={match.teams} matchId={match.key} finalized={match.finalized} canEdit={this.props.canEdit} />
-                                                </div>
-                                            </div>
-                                            <hr />
-                                        </div>
-                                    </div>
-                                )
-                            )}
-                        </div>
-                    </div>
+                            </div>
+                        )
+                    )}
                 </div>
             </div>
         );
@@ -83,7 +61,6 @@ class Matches extends Component {
         super(props);
 
         this.state = {
-            newPlayers: "",
             matches: []
         }
     }
@@ -103,46 +80,6 @@ class Matches extends Component {
 
             _this.setState({ matches: matches.slice().reverse() })
         });
-    }
-
-    handleChange(e) {
-        this.setState({ newPlayers: e.target.value });
-    }
-
-    generateTeams(e) {
-        e.preventDefault();
-
-        if (this.props.canEdit) {
-            let playersList = this.state.newPlayers.split(',')
-
-            playersList = playersList.map(function (el) {
-                return el.trim();
-            });
-
-            if (playersList.length >= 4) {
-                for (let i = playersList.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [playersList[i], playersList[j]] = [playersList[j], playersList[i]];
-                }
-
-                let teams = []
-
-                for (let i = 0; i < playersList.length; i += 2) {
-                    teams.push({
-                        players: playersList.slice(i, i + 2),
-                        score: 0
-                    });
-                }
-
-                firebase.database().ref("matches").push({
-                    teams: teams,
-                    created: new Date().getTime()
-                })
-
-                this.setState({newPlayers: ''})
-                document.getElementById("new-players").value = '';
-            }
-        }
     }
 
     finalizeScore(matchId) {
