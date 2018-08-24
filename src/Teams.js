@@ -6,7 +6,6 @@ import firebase from './utils/firebase';
 import explode from './utils/explode';
 
 class Teams extends Component {
-
     render() {
         return (
             <div className="row">
@@ -15,7 +14,6 @@ class Teams extends Component {
                         <div key={i}><b>{player}</b></div>
                     )}
                 </div>
-
                 <div className="col-12 col-md-4">
                     <div className="row">
                         <div className="col-4 team-score">
@@ -29,7 +27,6 @@ class Teams extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="col-12 col-md-4 team-wrapper text-right text-md-center">
                     {this.props.teams[1].players.map((player, i) =>
                         <div key={i}><b>{player}</b></div>
@@ -42,7 +39,7 @@ class Teams extends Component {
     changeScore (teamId, e) {
         if (this.props.canEdit) {
             // if clicked with ctrl then it's a decrease action.
-            // no way mobiles users can decrease atm
+            // no way mobile users can decrease atm
             let action = (e.ctrlKey === true) ? "decrease" : "increase";
 
             if (this.props.finalized !== true) {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import GenerateTeams from './GenerateTeams';
 import Matches from './Matches';
 import Leaderboard from './Leaderboard';
 
@@ -35,11 +36,18 @@ class App extends Component {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-12 col-xl-8">
-                            <h3 className="text-center">Matches</h3>
-                            <Matches canEdit={this.state.user !== null} />
+                            <div className="row">
+                                <div className="col">
+                                    <GenerateTeams canEdit={this.state.user !== null} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <Matches canEdit={this.state.user !== null} />
+                                </div>
+                            </div>
                         </div>
                         <div className="col-12 col-xl-4">
-                            <h3 className="text-center">Players</h3>
                             <Leaderboard />
                         </div>
                     </div>
