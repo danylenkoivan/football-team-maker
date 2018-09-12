@@ -14,4 +14,7 @@ Example of config file:
     "messagingSenderId": "..."
 
 # TODO LIST:
-1. Integrate physical button
+- add trigger function to recalculate players' points
+- add players nationalities and emoji flags next to names
+- Show medium points for teams
+- Integrate physical button

@@ -4,6 +4,9 @@ import firebase from './utils/firebase';
 
 class Leaderboard extends Component {
 
+    victoryPoints = 3;
+    lossPoints = 1;
+
     render() {
         return (
             <div className="row">
@@ -16,7 +19,9 @@ class Leaderboard extends Component {
                                 <td>Name</td>
                                 <td>Won</td>
                                 <td>Lost</td>
-                                <td>SAFF Rating</td>
+                                <td>Total</td>
+                                <td>Score</td>
+                                <td>To advance</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,7 +31,13 @@ class Leaderboard extends Component {
                                     <td>{player.key}</td>
                                     <td>{player.won}</td>
                                     <td>{player.lost}</td>
-                                    <td>{player.victory_score}</td>
+                                    <td>{player.total}</td>
+                                    <td>{player.score}</td>
+                                    <td className="text-success">
+                                        {player.victoriesToAdvance && (
+                                            <span><b>+{player.victoriesToAdvance}</b> victories</span>
+                                        )}
+                                    </td>
                                 </tr>
                             )}
                         </tbody>
@@ -54,12 +65,28 @@ class Leaderboard extends Component {
                 let data = player.val();
                 data.key = player.key
 
-                data.victory_score = Math.round(((data.won * (data.won / (data.won + data.lost))) * 100), 0)
+                data.total = (data.won + data.lost)
+
+                // Super Advanced Football Formula
+                // data.score = Math.round(((data.won * (data.won / (data.won + data.lost))) * 100), 0)
+
+                // 3 points for victory, 1 point for loss
+                data.score = data.won * this.victoryPoints + data.lost * this.lossPoints
 
                 players.push(data);
             });
 
-            _this.setState({ players: players.sort((a, b) => a.victory_score < b.victory_score) })
+            players.sort((a, b) => a.score < b.score)
+
+            players = players.map((player, index) => {
+                if (players[index - 1]) {
+                    player.victoriesToAdvance = Math.floor( ((players[index - 1].score - player.score) / this.victoryPoints) + 1 )
+                }
+                return player
+            })
+
+
+            _this.setState({ players: players })
         });
     }
 }
