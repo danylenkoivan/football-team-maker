@@ -35,7 +35,7 @@ class App extends Component {
                 </nav>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-12 col-xl-8">
+                        <div className="col-12 col-xl-12">
                             <div className="row">
                                 <div className="col">
                                     <GenerateTeams canEdit={this.state.user !== null} />
@@ -47,9 +47,9 @@ class App extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12 col-xl-4">
+                        {/* <div className="col-12 col-xl-4">
                             <Leaderboard />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
