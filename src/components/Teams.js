@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import './Teams.css';
 
-import firebase from './utils/firebase';
-import explode from './utils/explode';
+import firebase from '../utils/firebase';
+import explode from '../utils/explode';
 
 class Teams extends Component {
     render() {
