@@ -94,7 +94,8 @@ class App extends Component {
 
                 if (teams[teamOneKey] === undefined) {
                     teams[teamOneKey] = {
-                        goals: 0,
+                        goalsPlus: 0,
+                        goalsMinus: 0,
                         won: 0,
                         lost: 0
                     }
@@ -102,15 +103,19 @@ class App extends Component {
 
                 if (teams[teamTwoKey] === undefined) {
                     teams[teamTwoKey] = {
-                        goals: 0,
+                        goalsPlus: 0,
+                        goalsMinus: 0,
                         won: 0,
                         lost: 0
                     }
                 }
 
                 if (data.finalized === true) {
-                    teams[teamOneKey].goals += data.teams[0].score;
-                    teams[teamTwoKey].goals += data.teams[1].score;
+                    teams[teamOneKey].goalsPlus += data.teams[0].score;
+                    teams[teamOneKey].goalsMinus += data.teams[1].score;
+
+                    teams[teamTwoKey].goalsPlus += data.teams[1].score;
+                    teams[teamTwoKey].goalsMinus += data.teams[0].score;
 
                     if (data.teams[0].score > data.teams[1].score) {
                         teams[teamOneKey].won++;
@@ -131,14 +136,15 @@ class App extends Component {
             teams = Object.keys(teams).map((key) => {
                 return {
                     key: key,
-                    goals: teams[key].goals,
+                    goalsPlus: teams[key].goalsPlus,
+                    goalsMinus: teams[key].goalsMinus,
                     won: teams[key].won,
                     lost: teams[key].lost,
                     score: teams[key].won * this.victoryPoints + teams[key].lost * this.lossPoints
                 }
             })
 
-            teams.sort((a,b) => a.score - b.score || a.goals - b.goals).reverse()
+            teams.sort((a,b) => a.score - b.score || (a.goalsPlus - a.goalsMinus) - (b.goalsPlus - b.goalsMinus)).reverse()
 
             teams = teams.map((team, index) => {
                 if (teams[index - 1]) {
@@ -149,6 +155,9 @@ class App extends Component {
 
                 return team
             })
+
+            players.sort()
+
 
             _this.setState({
                 matches: matches.slice().reverse(),

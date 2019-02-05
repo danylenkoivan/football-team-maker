@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import firebase from '../utils/firebase';
-
 class Leaderboard extends Component {
 
     victoryPoints = 3;
@@ -20,8 +18,8 @@ class Leaderboard extends Component {
                                 <td>Won</td>
                                 <td>Lost</td>
                                 <td>Score</td>
-                                <td>Goals</td>
                                 <td>To advance</td>
+                                <td colSpan="2">Goals</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,13 +29,14 @@ class Leaderboard extends Component {
                                     <td>{player.key}</td>
                                     <td>{player.won}</td>
                                     <td>{player.lost}</td>
-                                    <td>{player.score}</td>
-                                    <td>{player.goals}</td>
+                                    <td><b>{player.score}</b></td>
                                     <td className="text-success">
                                         {player.winsToAdvance && (
                                             <span><b>+{player.winsToAdvance}</b> wins</span>
                                         )}
                                     </td>
+                                    <td className="text-success">{player.goalsPlus}</td>
+                                    <td className="text-danger">{player.goalsMinus}</td>
                                 </tr>
                             )}
                         </tbody>

@@ -7,29 +7,35 @@ class GenerateTeams extends Component {
         return (
             <div>
                 {this.props.canEdit === true &&
-                    <div>
-                        <h3 className="text-center">Generate teams</h3>
-                        <ul className="list-inline">
-                            {this.props.players.map((player, i) =>
-                                <li className="list-inline-item" key={i}>
-                                    <button className={"mb-2 btn " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "btn-primary" : "btn-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</button>
-                                </li>
-                            )}
-                            {this.state.newPlayers.map((player, i) =>
-                                <li className="list-inline-item" key={i}>
-                                    <button className={"mb-2 btn " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "btn-primary" : "btn-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</button>
-                                </li>
-                            )}
-                            <li className="list-inline-item">
-                                <div className="input-group mb-3">
-                                    <input type="text" className="form-control" placeholder="New player" onChange={this.newPlayerNameChange.bind(this)} value={this.state.newPlayerName} />
-                                    <div className="input-group-append">
-                                        <input type="button" className="btn btn-success" value="Add" onClick={this.addNewPlayer.bind(this)} />
+                    <div className="row">
+                        <div className="col-12">
+                            <h3 className="text-center">Generate teams</h3>
+                        </div>
+                        <div className="col-8">
+                            <ul className="list-inline mb-0">
+                                {this.props.players.map((player, i) =>
+                                    <li className="list-inline-item" key={i}>
+                                        <div className={"m-1 d-block btn " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "btn-primary" : "btn-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
+                                    </li>
+                                )}
+                                {this.state.newPlayers.map((player, i) =>
+                                    <li className="list-inline-item" key={i}>
+                                        <div className={"m-1 d-block btn " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "btn-primary" : "btn-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
+                                    </li>
+                                )}
+                                <li className="list-inline-item">
+                                    <div className="input-group m-1">
+                                        <input type="text" className="form-control" placeholder="New player" onChange={this.newPlayerNameChange.bind(this)} value={this.state.newPlayerName} />
+                                        <div className="input-group-append">
+                                            <input type="button" className="btn btn-success" value="Add" onClick={this.addNewPlayer.bind(this)} />
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <button type="button" className="btn btn-success" onClick={this.generateTeams.bind(this)}>Generate teams</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="col-4">
+                            <div className="btn btn-success rounded btn-generate-teams" onClick={this.generateTeams.bind(this)}>Generate teams</div>
+                        </div>
                     </div>
                 }
             </div>
