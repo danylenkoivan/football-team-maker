@@ -3,15 +3,12 @@ import React, { Component } from "react";
 import GenerateTeams from "./components/GenerateTeams";
 import Matches from "./components/Matches";
 import LeaderboardClassic from "./components/LeaderboardClassic";
+import LeaderboardElo from "./components/LeaderboardElo";
 import firebase from "./utils/firebase";
 
 class App extends Component {
     victoryPoints = 3;
     lossPoints = 1;
-
-    static defaultProps = {
-        scoreBoardAlgo: "classic"
-    };
 
     constructor(props) {
         super(props);
@@ -23,7 +20,8 @@ class App extends Component {
         this.state = {
             user: null,
             matches: [],
-            players: []
+            players: [],
+            scoreBoardAlgo: "classic"
         };
     }
 
@@ -81,6 +79,13 @@ class App extends Component {
             ...this.state,
             matches,
             players
+        });
+    };
+
+    handleScoreBoardAlgoChange = event => {
+        this.setState({
+            ...this.state,
+            scoreBoardAlgo: event.target.value
         });
     };
 
@@ -196,8 +201,18 @@ class App extends Component {
                             </div>
                         </div>
                         <div className="col-12 col-xl-5">
-                            {this.props.scoreBoardAlgo === "classic" && (
+                            <select onChange={this.handleScoreBoardAlgoChange}>
+                                <option value="classic">Classic</option>
+                                <option value="elo">ELO</option>
+                            </select>
+                            {this.state.scoreBoardAlgo === "classic" && (
                                 <LeaderboardClassic
+                                    players={this.state.players}
+                                    matches={this.state.matches}
+                                />
+                            )}
+                            {this.state.scoreBoardAlgo === "elo" && (
+                                <LeaderboardElo
                                     players={this.state.players}
                                     matches={this.state.matches}
                                 />
