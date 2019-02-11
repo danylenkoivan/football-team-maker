@@ -19,7 +19,7 @@ class Matches extends Component {
                             <img className="img-fluid" src="https://media.giphy.com/media/5j4wozAB0iC4w/giphy.gif" alt="" />
                         </div>
                     ) : (
-                        this.props.matches.map((match, i) =>
+                        this.props.matches.reverse().map((match, i) =>
                             <Match match={match} key={i} canEdit={this.props.canEdit} />
                         )
                     )}

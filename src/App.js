@@ -201,7 +201,7 @@ class App extends Component {
                             </div>
                         </div>
                         <div className="col-12 col-xl-5">
-                            <select onChange={this.handleScoreBoardAlgoChange}>
+                            <select className="form-control mb-4" onChange={this.handleScoreBoardAlgoChange}>
                                 <option value="classic">Classic</option>
                                 <option value="elo">ELO</option>
                             </select>
