@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import Elo from "elo-js";
+
+import LeaderboardItem from "./LeaderboardItem"
+
 const elo = new Elo();
 
-class LeaderboardElo extends Component {
+class Leaderboard extends Component {
     calculateTeams = matches => {
+        var matchesCopy = matches.slice()
+
         var teams = {};
-        matches.forEach(match => {
+        matchesCopy.forEach(match => {
             let teamOneKey = match.teams[0].players
                 .sort()
                 .join(" - ")
@@ -94,44 +99,13 @@ class LeaderboardElo extends Component {
         const teams = this.calculateTeams(this.props.matches);
 
         return (
-            <div className="row">
-                <div className="col">
-                    <h3 className="text-center">Teams Leaderboard</h3>
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <td>#</td>
-                                <td>Name</td>
-                                <td>Won</td>
-                                <td>Lost</td>
-                                <td>ELO</td>
-                                <td colSpan="2">Goals</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {teams.map((team, i) => (
-                                <tr key={i}>
-                                    <td>{i + 1}</td>
-                                    <td>{team.key}</td>
-                                    <td>{team.won}</td>
-                                    <td>{team.lost}</td>
-                                    <td>
-                                        <b>{team.elo}</b>
-                                    </td>
-                                    <td className="text-success">
-                                        {team.goalsPlus}
-                                    </td>
-                                    <td className="text-danger">
-                                        {team.goalsMinus}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+            <div>
+                {teams.map((team, i) =>
+                    <LeaderboardItem team={team} index={i + 1} key={i} />
+                )}
             </div>
         );
     }
 }
 
-export default LeaderboardElo;
+export default Leaderboard;

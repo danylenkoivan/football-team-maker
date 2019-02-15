@@ -9,31 +9,23 @@ class Match extends Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-12">
-                    <div className="row mb-3">
-                        <div className="col-12">
-                            <h5 className="d-inline mr-2">
-                                {moment(this.props.match.created).format('D MMMM YYYY, HH:mm')}
-                            </h5>
+            <div className="tile is-vertical match-item has-background-light">
+                <div className="tile is-parent">
+                    {moment(this.props.match.created).format('D MMMM YYYY, HH:mm')}
+                </div>
 
-                            {this.props.match.finalized !== true ? (
-                                <span>
-                                    {this.props.canEdit === true && (
-                                        <span className="text-primary lock-score" onClick={this.finalizeScore.bind(this)}>Lock the score</span>
-                                    )}
-                                </span>
-                            ) : (
-                                <span className="text-primary lock-score" onClick={this.rematch.bind(this)}>Rematch</span>
+                <Teams teams={this.props.match.teams} matchId={this.props.match.key} finalized={this.props.match.finalized} canEdit={this.props.canEdit} />
+
+                <div className="tile is-parent has-text-primary">
+                    {this.props.match.finalized !== true ? (
+                        <div className="tile is-child">
+                            {this.props.canEdit === true && (
+                                <span className="lock-score" onClick={this.finalizeScore.bind(this)}>Lock the score</span>
                             )}
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <Teams teams={this.props.match.teams} matchId={this.props.match.key} finalized={this.props.match.finalized} canEdit={this.props.canEdit} />
-                        </div>
-                    </div>
-                    <hr />
+                    ) : (
+                        <div className="tile is-child  lock-score" onClick={this.rematch.bind(this)}>Rematch</div>
+                    )}
                 </div>
             </div>
         );
@@ -41,8 +33,6 @@ class Match extends Component {
 
     rematch() {
         if (window.confirm("Are you sure you want to rematch?")) {
-            console.log(this.props.match);
-
             firebase.database().ref("matches").push({
                 teams: {
                     0: {

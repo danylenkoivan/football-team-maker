@@ -1,0 +1,58 @@
+.leaderboard-item {
+  margin: 1rem 0;
+  padding: 0 2rem;
+}
+
+.leaderboard-item .tile {
+  justify-content: center;
+}
+
+.leaderboard-item.featured {
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.leaderboard-item .leaderboard-item-position {
+  color: #dedede;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.leaderboard-item .leaderboard-item-cell {
+  font-size: 1.5rem;
+  font-weight: bold;
+  float: left;
+  margin: 0 10px;
+  min-width: 100px;
+  text-align: center;
+  padding: 0.1rem 1rem;
+}
+
+.leaderboard-item.featured .leaderboard-item-cell {
+  padding: 0.5rem 1rem;
+}
+
+.leaderboard-item .leaderboard-item-cell-label {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.leaderboard-item .leaderboard-item-cell.leaderboard-item-cell-won {
+  color: #529900;
+}
+
+.leaderboard-item .leaderboard-item-cell.leaderboard-item-cell-lost {
+  color: #d0021b;
+}
+
+.leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-scored, .leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-missed {
+  font-size: 0.6rem;
+}
+
+.leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-scored {
+  color: #529900;
+}
+
+.leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-missed {
+  color: #d0021b;
+}

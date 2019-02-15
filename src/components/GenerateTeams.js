@@ -2,39 +2,34 @@ import React, { Component } from 'react';
 
 import firebase from '../utils/firebase';
 
+import './GenerateTeams.css';
+
 class GenerateTeams extends Component {
     render() {
         return (
             <div>
                 {this.props.canEdit === true &&
-                    <div className="row">
-                        <div className="col-12">
-                            <h3 className="text-center">Generate teams</h3>
-                        </div>
-                        <div className="col-8">
-                            <ul className="list-inline mb-0">
-                                {this.props.players.map((player, i) =>
-                                    <li className="list-inline-item" key={i}>
-                                        <div className={"m-1 d-block btn " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "btn-primary" : "btn-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
-                                    </li>
-                                )}
-                                {this.state.newPlayers.map((player, i) =>
-                                    <li className="list-inline-item" key={i}>
-                                        <div className={"m-1 d-block btn " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "btn-primary" : "btn-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
-                                    </li>
-                                )}
-                                <li className="list-inline-item">
-                                    <div className="input-group m-1">
-                                        <input type="text" className="form-control" placeholder="New player" onChange={this.newPlayerNameChange.bind(this)} value={this.state.newPlayerName} />
-                                        <div className="input-group-append">
-                                            <input type="button" className="btn btn-success" value="Add" onClick={this.addNewPlayer.bind(this)} />
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="col-4">
-                            <div className="btn btn-success rounded btn-generate-teams" onClick={this.generateTeams.bind(this)}>Generate teams</div>
+                    <div className="columns">
+                        <div className="column has-text-centered">
+                            {this.props.players.map((player, i) =>
+                                <div key={i} className={"player-item button " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "is-dark" : "is-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
+                            )}
+                            {this.state.newPlayers.map((player, i) =>
+                                <div key={i} className={"player-item button " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "is-dark" : "is-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
+                            )}
+
+                            <div className="field has-addons">
+                                <div className="control new-player-control">
+                                    <input type="text" className="input" placeholder="New player" onChange={this.newPlayerNameChange.bind(this)} value={this.state.newPlayerName} />
+                                </div>
+                                <div className="control">
+                                    <a className="button is-dark" onClick={this.addNewPlayer.bind(this)}>Add</a>
+                                </div>
+                            </div>
+
+                            <div className="button is-dark is-fullwidth" onClick={this.generateTeams.bind(this)}>
+                                <span>Start match</span>
+                            </div>
                         </div>
                     </div>
                 }

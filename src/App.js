@@ -1,45 +1,91 @@
 import React, { Component } from "react";
+import "bulma/css/bulma.min.css";
+import "./App.css";
 
+
+import Login from "./components/Login";
 import GenerateTeams from "./components/GenerateTeams";
 import Matches from "./components/Matches";
-import LeaderboardClassic from "./components/LeaderboardClassic";
-import LeaderboardElo from "./components/LeaderboardElo";
+import Leaderboard from "./components/Leaderboard";
 import firebase from "./utils/firebase";
 
 class App extends Component {
-    victoryPoints = 3;
-    lossPoints = 1;
+    render() {
+        return (
+            <div>
+                <nav className="navbar is-dark is-fixed-top">
+                    <div className="navbar-brand">
+                        <a className="navbar-item is-size-4" href="/">
+                            Football team manager
+                        </a>
+                    </div>
+                    <div className="navbar-menu">
+                        <div className="navbar-start">
+
+                        </div>
+
+                        <div className="navbar-end">
+                            <div className="navbar-item">
+                                <Login />
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <section className="container main-content">
+                    <div className="columns">
+                        <div className="column is-10 is-offset-1">
+                            <div className="columns">
+                                <div className="column is-12">
+                                    <div className="columns">
+                                        <div className="column"><h3 className="is-size-3 has-text-weight-bold">Match center</h3></div>
+                                    </div>
+                                    <div className="columns">
+                                        <div className="column is-3">
+                                            <GenerateTeams players={this.state.players} canEdit={this.state.user !== null} />
+                                        </div>
+                                        <div className="column is-9">
+                                            <Matches canEdit={this.state.user !== null} matches={this.state.matches} teams={this.state.teams} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="columns">
+                                <div className="column is-12">
+                                    <div className="columns">
+                                        <div className="column"><h3 className="is-size-3 has-text-weight-bold">Leaderboard</h3></div>
+                                    </div>
+                                    <div className="columns">
+                                        <div className="column">
+                                            <Leaderboard players={this.state.players} matches={this.state.matches} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        );
+    }
 
     constructor(props) {
         super(props);
 
         this.state = {
-            matchesSnapshot: []
-        };
-
-        this.state = {
             user: null,
+            matchesSnapshot: [],
             matches: [],
             players: [],
-            scoreBoardAlgo: "classic"
         };
     }
 
     componentDidMount() {
-        let _this = this;
         firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                this.setState({ user });
-            }
+            this.setState({ user });
         });
 
         this.listenForMatchUpdates();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.invalidationKey !== this.state.invalidationKey) {
-            this.generateData();
-        }
     }
 
     listenForMatchUpdates = () => {
@@ -50,8 +96,9 @@ class App extends Component {
             .on("value", snapshot => {
                 this.setState({
                     ...this.state,
-                    matchesSnapshot: snapshot.val(),
-                    invalidationKey: new Date().getTime()
+                    matchesSnapshot: snapshot.val()
+                }, () => {
+                    this.generateData()
                 });
             });
     };
@@ -82,146 +129,41 @@ class App extends Component {
         });
     };
 
-    handleScoreBoardAlgoChange = event => {
-        this.setState({
-            ...this.state,
-            scoreBoardAlgo: event.target.value
-        });
-    };
+    getTeamsData(teams, teamOne, teamTwo) {
+        let teamOneKey = teamOne.players.sort().join(' - ').toUpperCase().trim()
+        let teamTwoKey = teamTwo.players.sort().join(' - ').toUpperCase().trim()
 
-    login(e) {
-        e.preventDefault();
-        let _this = this;
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(
-                document.getElementById("email").value,
-                document.getElementById("password").value
-            )
-            .then(function(data) {
-                _this.setState({ user: data.user });
-            })
-            .catch(function(error) {
-                alert(error.message);
-            });
-    }
+        if (teams[teamOneKey] === undefined) {
+            teams[teamOneKey] = {
+                goalsPlus: 0,
+                goalsMinus: 0,
+                won: 0,
+                lost: 0
+            }
+        }
 
-    logout(e) {
-        e.preventDefault();
-        firebase
-            .auth()
-            .signOut()
-            .then(() => {
-                this.setState({
-                    user: null
-                });
-            });
-    }
+        if (teams[teamTwoKey] === undefined) {
+            teams[teamTwoKey] = {
+                goalsPlus: 0,
+                goalsMinus: 0,
+                won: 0,
+                lost: 0
+            }
+        }
 
-    render() {
-        return (
-            <div>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
-                    <a className="navbar-brand" href="/">
-                        Football team manager
-                    </a>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#main-menu"
-                        aria-controls="main-menu"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon" />
-                    </button>
+        teams[teamOneKey].goalsPlus += teamOne.score;
+        teams[teamOneKey].goalsMinus += teamTwo.score;
 
-                    <div className="collapse navbar-collapse" id="main-menu">
-                        <ul className="navbar-nav mr-auto" />
-                        {this.state.user ? (
-                            <div className="form-inline my-2 my-lg-0">
-                                <label className="navbar-text mr-2">
-                                    {this.state.user.email}
-                                </label>
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={this.logout.bind(this)}
-                                >
-                                    Logout
-                                </button>
-                            </div>
-                        ) : (
-                            <form
-                                className="form-inline my-2 my-lg-0"
-                                onSubmit={this.login.bind(this)}
-                            >
-                                <input
-                                    className="form-control mb-2 mb-md-0 mr-sm-2"
-                                    id="email"
-                                    type="email"
-                                    placeholder="Email"
-                                    aria-label="Email"
-                                />
-                                <input
-                                    className="form-control mb-2 mb-md-0 mr-sm-2"
-                                    id="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    aria-label="Password"
-                                />
-                                <button
-                                    className="btn btn-primary my-2 my-sm-0"
-                                    type="submit"
-                                >
-                                    Login
-                                </button>
-                            </form>
-                        )}
-                    </div>
-                </nav>
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-12 col-xl-7">
-                            <div className="row">
-                                <div className="col">
-                                    <GenerateTeams
-                                        players={this.state.players}
-                                        canEdit={this.state.user !== null}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <Matches
-                                        canEdit={this.state.user !== null}
-                                        matches={this.state.matches}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-12 col-xl-5">
-                            <select className="form-control mb-4" onChange={this.handleScoreBoardAlgoChange}>
-                                <option value="classic">Classic</option>
-                                <option value="elo">ELO</option>
-                            </select>
-                            {this.state.scoreBoardAlgo === "classic" && (
-                                <LeaderboardClassic
-                                    players={this.state.players}
-                                    matches={this.state.matches}
-                                />
-                            )}
-                            {this.state.scoreBoardAlgo === "elo" && (
-                                <LeaderboardElo
-                                    players={this.state.players}
-                                    matches={this.state.matches}
-                                />
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        teams[teamTwoKey].goalsPlus += teamTwo.score;
+        teams[teamTwoKey].goalsMinus += teamOne.score;
+
+        if (teamOne.score > teamTwo.score) {
+            teams[teamOneKey].won++;
+            teams[teamTwoKey].lost++;
+        } else if (teamOne.score < teamTwo.score) {
+            teams[teamOneKey].lost++;
+            teams[teamTwoKey].won++;
+        }
     }
 }
 

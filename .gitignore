@@ -22,3 +22,6 @@ yarn-error.log*
 
 # config files
 /src/utils/firebase-config/*
+
+
+.firebase/*

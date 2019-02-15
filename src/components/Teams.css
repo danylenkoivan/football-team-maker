@@ -1,13 +1,21 @@
+.lock-score {
+    cursor: pointer;
+}
+
 .team-score {
   font-size: 2em;
 }
 
-.team-score .badge {
-  cursor: default;
-  width: 100%;
+.team-score .tag {
+    cursor: default;
+    height: 100%;
+
+    display:flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.team-score .badge.active.editable {
+.team-score .tag.active.editable {
   cursor: pointer;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
