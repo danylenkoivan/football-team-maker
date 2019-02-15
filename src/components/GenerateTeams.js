@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import firebase from '../utils/firebase';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './GenerateTeams.css';
 
@@ -23,7 +24,7 @@ class GenerateTeams extends Component {
                                     <input type="text" className="input" placeholder="New player" onChange={this.newPlayerNameChange.bind(this)} value={this.state.newPlayerName} />
                                 </div>
                                 <div className="control">
-                                    <a className="button is-dark" onClick={this.addNewPlayer.bind(this)}>Add</a>
+                                    <a className="button is-dark" onClick={this.addNewPlayer.bind(this)}><FontAwesomeIcon icon="plus" /></a>
                                 </div>
                             </div>
 

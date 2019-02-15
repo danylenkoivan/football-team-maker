@@ -9,6 +9,11 @@ import Matches from "./components/Matches";
 import Leaderboard from "./components/Leaderboard";
 import firebase from "./utils/firebase";
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTrophy, faMedal, faPlus } from '@fortawesome/free-solid-svg-icons'
+
+library.add([faTrophy, faMedal, faPlus])
+
 class App extends Component {
     render() {
         return (
