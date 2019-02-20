@@ -7,7 +7,7 @@ import './LeaderboardItem.css';
 class LeaderboardItem extends Component {
     render() {
         return (
-            <div className={"columns is-vcentered leaderboard-item leaderboard-item-" + this.props.index + (this.props.index === 1 ? " box featured has-background-light" : "")}>
+            <div className={"columns is-vcentered leaderboard-item leaderboard-item-" + this.props.index + (this.props.index === 1 ? " featured has-background-light" : "")}>
                 <div className="column is-1 leaderboard-item-position has-text-centered">
                     {this.props.index === 1 && (
                         <FontAwesomeIcon icon="trophy" />
@@ -22,7 +22,12 @@ class LeaderboardItem extends Component {
                         <span>{this.props.index}</span>
                     )}
                 </div>
-                <div className="column is-4">{this.props.team.key}</div>
+                <div className="column is-1 leaderboard-item-score">
+                    <span class="tag is-dark">{this.props.team.elo}</span>
+                </div>
+                <div className="column is-3">
+                    {this.props.team.key}
+                </div>
                 <div className="column is-7">
                     <div className="leaderboard-item-cell leaderboard-item-cell-won tile is-ancestor is-vertical">
                         {this.props.index === 1 && (
@@ -63,16 +68,6 @@ class LeaderboardItem extends Component {
                                     - {this.props.team.goalsMinus}
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="leaderboard-item-cell leaderboard-item-cell-points tile is-ancestor is-vertical has-text-centered">
-                        {this.props.index === 1 && (
-                            <div className="tile leaderboard-item-cell-label">
-                                Score
-                            </div>
-                        )}
-                        <div className="tile">
-                            {this.props.team.elo}
                         </div>
                     </div>
                 </div>

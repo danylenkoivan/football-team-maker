@@ -10,9 +10,9 @@ import Leaderboard from "./components/Leaderboard";
 import firebase from "./utils/firebase";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrophy, faMedal, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand } from '@fortawesome/free-solid-svg-icons'
 
-library.add([faTrophy, faMedal, faPlus])
+library.add([faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand])
 
 class App extends Component {
     render() {
@@ -133,43 +133,6 @@ class App extends Component {
             players
         });
     };
-
-    getTeamsData(teams, teamOne, teamTwo) {
-        let teamOneKey = teamOne.players.sort().join(' - ').toUpperCase().trim()
-        let teamTwoKey = teamTwo.players.sort().join(' - ').toUpperCase().trim()
-
-        if (teams[teamOneKey] === undefined) {
-            teams[teamOneKey] = {
-                goalsPlus: 0,
-                goalsMinus: 0,
-                won: 0,
-                lost: 0
-            }
-        }
-
-        if (teams[teamTwoKey] === undefined) {
-            teams[teamTwoKey] = {
-                goalsPlus: 0,
-                goalsMinus: 0,
-                won: 0,
-                lost: 0
-            }
-        }
-
-        teams[teamOneKey].goalsPlus += teamOne.score;
-        teams[teamOneKey].goalsMinus += teamTwo.score;
-
-        teams[teamTwoKey].goalsPlus += teamTwo.score;
-        teams[teamTwoKey].goalsMinus += teamOne.score;
-
-        if (teamOne.score > teamTwo.score) {
-            teams[teamOneKey].won++;
-            teams[teamTwoKey].lost++;
-        } else if (teamOne.score < teamTwo.score) {
-            teams[teamOneKey].lost++;
-            teams[teamTwoKey].won++;
-        }
-    }
 }
 
 export default App;

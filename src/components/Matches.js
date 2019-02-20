@@ -26,7 +26,7 @@ class Matches extends Component {
                             </div>
                         )}
                     </div>
-                    <div class="button is-white is-uppercase has-text-primary" onClick={this.toggleMatchesShown.bind(this)}>
+                    <div className="button is-outlined is-uppercase has-text-info" onClick={this.toggleMatchesShown.bind(this)}>
                         {this.state.showAll && this.props.matches.length > defaultMatchesShownCount ? (
                             <span>Show less matches</span>
                         ) : (

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Teams from './Teams';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import firebase from '../utils/firebase';
 import moment from 'moment';
 
@@ -9,24 +10,36 @@ class Match extends Component {
 
     render() {
         return (
-            <div className="tile is-vertical match-item has-background-light">
+            <div className={"tile is-vertical match-item message"}>
                 <div className="tile is-parent">
-                    {moment(this.props.match.created).format('D MMMM YYYY, HH:mm')}
+                    <div className="tile is-child has-text-left">
+                        <div className="button is-static">
+                            {moment(this.props.match.created).format('D MMMM YYYY, HH:mm')}
+                        </div>
+                    </div>
+
+                    <div className="tile is-child has-text-right">
+
+                        {this.props.match.finalized === true && this.props.canEdit === true && (
+                            <div className="button is-info" onClick={this.rematch.bind(this)} title="Rematch">
+                                <FontAwesomeIcon icon="redo" />
+                            </div>
+                        )}
+
+                        {this.props.match.finalized !== true && this.props.canEdit === true && (
+                            <div className="buttons is-pulled-right">
+                                <div className="button is-info" disabled  title="Expand">
+                                    <FontAwesomeIcon icon="expand" />
+                                </div>
+                                <div className="button is-info" onClick={this.finalizeScore.bind(this)} title="Finish">
+                                    <FontAwesomeIcon icon="power-off" />
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <Teams teams={this.props.match.teams} matchId={this.props.match.key} finalized={this.props.match.finalized} canEdit={this.props.canEdit} />
-
-                <div className="tile is-parent has-text-primary">
-                    {this.props.match.finalized !== true ? (
-                        <div className="tile is-child">
-                            {this.props.canEdit === true && (
-                                <span className="lock-score" onClick={this.finalizeScore.bind(this)}>Lock the score</span>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="tile is-child  lock-score" onClick={this.rematch.bind(this)}>Rematch</div>
-                    )}
-                </div>
             </div>
         );
     }
@@ -50,7 +63,7 @@ class Match extends Component {
     }
 
     finalizeScore() {
-        if (window.confirm("Are you sure you want to lock this match's score?")) {
+        if (window.confirm("Are you sure you want to finish this match?")) {
             firebase.database().ref('matches/' + this.props.match.key).update({finalized: true})
 
             if (

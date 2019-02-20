@@ -18,6 +18,10 @@
   font-weight: 600;
 }
 
+.leaderboard-item .leaderboard-item-score .tag {
+  font-size: 0.5rem;
+}
+
 .leaderboard-item.leaderboard-item-1 .leaderboard-item-position {
   color: #ffe082;
   font-size: 3rem;
