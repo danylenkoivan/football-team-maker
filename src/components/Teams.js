@@ -8,29 +8,43 @@ import './Teams.css';
 class Teams extends Component {
     render() {
         return (
-            <div className="tile is-parent">
-                <div className="tile is-child team-wrapper">
-                    {this.props.teams[0].players.map((player, i) =>
-                        <div key={i}><b>{player}</b></div>
-                    )}
-                </div>
-                <div className="tile is-child">
-                    <div className="tile">
-                        <div className="tile is-child team-score">
-                            <span className={"tag is-size-4 " + (this.props.finalized ? "is-dark" : "is-danger active") + (this.props.canEdit ? " editable" : "")} onClick={(e) => this.changeScore(0, e)}>{this.props.teams[0].score}</span>
-                        </div>
-                        <div className="tile is-child team-score">
-                            -
-                        </div>
-                        <div className="tile is-child team-score">
-                            <span className={"tag is-size-4 " + (this.props.finalized ? "is-dark" : "is-white active") + (this.props.canEdit ? " editable" : "")} onClick={(e) => this.changeScore(1, e)}>{this.props.teams[1].score}</span>
-                        </div>
+            <div className="tile">
+                <div className="tile is-parent is-vertical team-wrapper">
+                    <div className="tile is-child">
+                        {this.props.teams[0].players.map((player, i) =>
+                            <div key={i}><b>{player}</b></div>
+                        )}
+
+                        {!this.props.finalized ? (
+                            <div className="tag is-dark">{this.props.teams[0].elo}</div>
+                        ) : (
+                            <div className={"tag" + (this.props.teams[0].eloChange > 0 ? " is-success" : " is-danger")}>{this.props.teams[0].eloChange}</div>
+                        )}
                     </div>
                 </div>
-                <div className="tile is-child team-wrapper">
-                    {this.props.teams[1].players.map((player, i) =>
-                        <div key={i}><b>{player}</b></div>
-                    )}
+                <div className="tile is-parent">
+                    <div className="tile is-child team-score">
+                        <span className={"team-score-item tag is-size-4 " + (this.props.finalized ? "is-dark" : "is-danger active") + (this.props.canEdit ? " editable" : "")} onClick={(e) => this.changeScore(0, e)}>{this.props.teams[0].score}</span>
+                    </div>
+                    <div className="tile is-child team-score">
+                        <span className="team-score-item is-size-4">-</span>
+                    </div>
+                    <div className="tile is-child team-score">
+                        <span className={"team-score-item tag is-size-4 " + (this.props.finalized ? "is-dark" : "is-white active") + (this.props.canEdit ? " editable" : "")} onClick={(e) => this.changeScore(1, e)}>{this.props.teams[1].score}</span>
+                    </div>
+                </div>
+                <div className="tile is-parent is-vertical team-wrapper">
+                    <div className="tile is-child">
+                        {this.props.teams[1].players.map((player, i) =>
+                            <div key={i}><b>{player}</b></div>
+                        )}
+
+                        {!this.props.finalized ? (
+                            <div className="tag is-dark">{this.props.teams[1].elo}</div>
+                        ) : (
+                            <div className={"tag" + (this.props.teams[1].eloChange > 0 ? " is-success" : " is-danger")}>{this.props.teams[1].eloChange}</div>
+                        )}
+                    </div>
                 </div>
             </div>
         );

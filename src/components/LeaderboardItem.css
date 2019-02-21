@@ -1,6 +1,6 @@
 .leaderboard-item {
   margin: 1rem 0;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .leaderboard-item .tile {
@@ -8,18 +8,14 @@
 }
 
 .leaderboard-item.featured {
-  margin-bottom: 2rem;
-  padding: 2rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
 }
 
 .leaderboard-item .leaderboard-item-position {
   color: #dedede;
   font-size: 1.5rem;
   font-weight: 600;
-}
-
-.leaderboard-item .leaderboard-item-score .tag {
-  font-size: 0.5rem;
 }
 
 .leaderboard-item.leaderboard-item-1 .leaderboard-item-position {

@@ -10,7 +10,7 @@ class Match extends Component {
 
     render() {
         return (
-            <div className={"tile is-vertical match-item message"}>
+            <div className={"tile is-vertical match-item message" + (this.props.match.finalized === true ? " is-white" : "")}>
                 <div className="tile is-parent">
                     <div className="tile is-child has-text-left">
                         <div className="button is-static">
@@ -28,7 +28,7 @@ class Match extends Component {
 
                         {this.props.match.finalized !== true && this.props.canEdit === true && (
                             <div className="buttons is-pulled-right">
-                                <div className="button is-info" disabled  title="Expand">
+                                <div className="button is-info" disabled onClick={this.toggleFullScreen.bind(this)} title="Full screen">
                                     <FontAwesomeIcon icon="expand" />
                                 </div>
                                 <div className="button is-info" onClick={this.finalizeScore.bind(this)} title="Finish">
@@ -40,8 +40,27 @@ class Match extends Component {
                 </div>
 
                 <Teams teams={this.props.match.teams} matchId={this.props.match.key} finalized={this.props.match.finalized} canEdit={this.props.canEdit} />
+
+
+                {this.props.match.finalized === true && (
+                    <hr />
+                )}
             </div>
         );
+    }
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            fullScreenMode: false
+        }
+    }
+
+    toggleFullScreen() {
+        this.setState({
+            state: !this.state
+        })
     }
 
     rematch() {

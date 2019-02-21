@@ -7,7 +7,7 @@ import './Matches.css';
 class Matches extends Component {
 
     render() {
-        var defaultMatchesShownCount = 3;
+        const defaultMatchesShownCount = 3;
 
         return (
             <div className="columns">
@@ -26,13 +26,15 @@ class Matches extends Component {
                             </div>
                         )}
                     </div>
-                    <div className="button is-outlined is-uppercase has-text-info" onClick={this.toggleMatchesShown.bind(this)}>
-                        {this.state.showAll && this.props.matches.length > defaultMatchesShownCount ? (
-                            <span>Show less matches</span>
-                        ) : (
-                            <span>Show all matches</span>
-                        )}
-                    </div>
+                    {this.props.matches.length > defaultMatchesShownCount && (
+                        <div className="button is-outlined is-uppercase has-text-info" onClick={this.toggleMatchesShown.bind(this)}>
+                            {this.state.showAll ? (
+                                <span>Show less matches</span>
+                            ) : (
+                                <span>Show more matches</span>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         );

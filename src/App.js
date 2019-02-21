@@ -1,13 +1,15 @@
-import React, { Component } from "react";
-import "bulma/css/bulma.min.css";
-import "./App.css";
+import React, { Component } from "react"
+import "bulma/css/bulma.min.css"
+import "./App.css"
 
 
-import Login from "./components/Login";
-import GenerateTeams from "./components/GenerateTeams";
-import Matches from "./components/Matches";
-import Leaderboard from "./components/Leaderboard";
-import firebase from "./utils/firebase";
+import Login from "./components/Login"
+import GenerateTeams from "./components/GenerateTeams"
+import Matches from "./components/Matches"
+import Leaderboard from "./components/Leaderboard"
+import firebase from "./utils/firebase"
+
+import Elo from "elo-js"
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand } from '@fortawesome/free-solid-svg-icons'
@@ -62,7 +64,7 @@ class App extends Component {
                                     </div>
                                     <div className="columns">
                                         <div className="column">
-                                            <Leaderboard players={this.state.players} matches={this.state.matches} />
+                                            <Leaderboard players={this.state.players} matches={this.state.matches} teams={this.state.teams} />
                                         </div>
                                     </div>
                                 </div>
@@ -82,6 +84,7 @@ class App extends Component {
             matchesSnapshot: [],
             matches: [],
             players: [],
+            teams: [],
         };
     }
 
@@ -127,11 +130,109 @@ class App extends Component {
 
         players.sort();
 
+        const teams = this.calculateTeams(matches);
+
         this.setState({
             ...this.state,
             matches,
-            players
+            players,
+            teams
         });
+    };
+
+    calculateTeams = matches => {
+        const elo = new Elo();
+
+        var teams = {};
+        matches.forEach(match => {
+            let teamOneKey = match.teams[0].players
+                .sort()
+                .join(" - ")
+                .toUpperCase()
+                .trim();
+
+            let teamTwoKey = match.teams[1].players
+                .sort()
+                .join(" - ")
+                .toUpperCase()
+                .trim();
+
+            teams[teamOneKey] = teams[teamOneKey] || {
+                goalsPlus: 0,
+                goalsMinus: 0,
+                won: 0,
+                lost: 0,
+                elo: 1200
+            };
+
+            teams[teamTwoKey] = teams[teamTwoKey] || {
+                goalsPlus: 0,
+                goalsMinus: 0,
+                won: 0,
+                lost: 0,
+                elo: 1200
+            };
+
+            match.teams[0].elo = teams[teamOneKey].elo
+            match.teams[1].elo = teams[teamTwoKey].elo
+
+            if (match.finalized === true) {
+                teams[teamOneKey].goalsPlus += match.teams[0].score;
+                teams[teamOneKey].goalsMinus += match.teams[1].score;
+
+                teams[teamTwoKey].goalsPlus += match.teams[1].score;
+                teams[teamTwoKey].goalsMinus += match.teams[0].score;
+
+                const winnerKey =
+                    match.teams[0].score > match.teams[1].score
+                        ? teamOneKey
+                        : teamTwoKey;
+                const loserKey =
+                    match.teams[0].score > match.teams[1].score
+                        ? teamTwoKey
+                        : teamOneKey;
+
+                teams[winnerKey].won++;
+                teams[loserKey].lost++;
+
+                teams[winnerKey].elo = elo.ifWins(
+                    teams[winnerKey].elo,
+                    teams[loserKey].elo
+                );
+
+                teams[loserKey].elo = elo.ifLoses(
+                    teams[loserKey].elo,
+                    teams[winnerKey].elo
+                );
+
+                match.teams[0].eloChange = teams[teamOneKey].elo - match.teams[0].elo
+                match.teams[1].eloChange = teams[teamTwoKey].elo - match.teams[1].elo
+            }
+        });
+
+        teams = Object.keys(teams).map(key => {
+            return {
+                key: key,
+                goalsPlus: teams[key].goalsPlus,
+                goalsMinus: teams[key].goalsMinus,
+                won: teams[key].won,
+                lost: teams[key].lost,
+                elo: teams[key].elo
+            };
+        });
+
+        teams
+            .sort((a, b) => {
+                if (a.elo === b.elo) return 0;
+                if (a.elo < b.elo) {
+                    return -1;
+                }
+
+                return 1;
+            })
+            .reverse();
+
+        return teams;
     };
 }
 

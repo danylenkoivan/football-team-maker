@@ -2,7 +2,7 @@
   font-size: 2em;
 }
 
-.team-score .tag {
+.team-score .team-score-item {
     cursor: default;
     height: 100%;
 
@@ -11,7 +11,7 @@
     justify-content: center;
 }
 
-.team-score .tag.active.editable {
+.team-score .team-score-item.active.editable {
   cursor: pointer;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

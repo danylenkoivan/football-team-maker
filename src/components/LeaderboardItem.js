@@ -23,7 +23,7 @@ class LeaderboardItem extends Component {
                     )}
                 </div>
                 <div className="column is-1 leaderboard-item-score">
-                    <span class="tag is-dark">{this.props.team.elo}</span>
+                    <span className="tag is-dark">{this.props.team.elo}</span>
                 </div>
                 <div className="column is-3">
                     {this.props.team.key}
