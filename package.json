@@ -7,6 +7,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/react-fontawesome": "^0.1.3",
     "bulma": "^0.7.4",
+    "node-sass": "^4.11.0",
     "elo-js": "^1.0.1",
     "firebase": "^5.2.0",
     "firebaseui": "^3.1.1",
@@ -16,8 +17,11 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
+    "css-build": "node-sass --omit-source-map-url src/styles/sass/main.scss src/App.css",
+    "css-watch": "npm run css-build -- --watch",
+
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run css-build && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

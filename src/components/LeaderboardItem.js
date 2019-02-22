@@ -29,7 +29,7 @@ class LeaderboardItem extends Component {
                     {this.props.team.key}
                 </div>
                 <div className="column is-7">
-                    <div className="leaderboard-item-cell leaderboard-item-cell-won tile is-ancestor is-vertical">
+                    <div className="leaderboard-item-cell tile is-ancestor is-vertical has-text-success">
                         {this.props.index === 1 && (
                             <div className="tile leaderboard-item-cell-label">
                                 Won
@@ -39,7 +39,7 @@ class LeaderboardItem extends Component {
                             {this.props.team.won}
                         </div>
                     </div>
-                    <div className="leaderboard-item-cell leaderboard-item-cell-lost tile is-ancestor is-vertical has-text-centered">
+                    <div className="leaderboard-item-cell tile is-ancestor is-vertical has-text-centered has-text-danger">
                         {this.props.index === 1 && (
                             <div className="tile leaderboard-item-cell-label">
                                 Lost
@@ -61,10 +61,10 @@ class LeaderboardItem extends Component {
                                 {this.props.team.goalsPlus - this.props.team.goalsMinus}
                             </div>
                             <div className="tile is-vertical">
-                                <div className="tile leaderboard-item-cell-goal-stats-scored">
+                                <div className="tile leaderboard-item-cell-goal-stats-scored has-text-success">
                                     + {this.props.team.goalsPlus}
                                 </div>
-                                <div className="tile leaderboard-item-cell-goal-stats-missed">
+                                <div className="tile leaderboard-item-cell-goal-stats-missed has-text-danger">
                                     - {this.props.team.goalsMinus}
                                 </div>
                             </div>

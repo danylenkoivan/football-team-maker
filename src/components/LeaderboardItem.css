@@ -52,22 +52,6 @@
   font-weight: normal;
 }
 
-.leaderboard-item .leaderboard-item-cell.leaderboard-item-cell-won {
-  color: #529900;
-}
-
-.leaderboard-item .leaderboard-item-cell.leaderboard-item-cell-lost {
-  color: #d0021b;
-}
-
 .leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-scored, .leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-missed {
   font-size: 0.6rem;
-}
-
-.leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-scored {
-  color: #529900;
-}
-
-.leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-missed {
-  color: #d0021b;
 }

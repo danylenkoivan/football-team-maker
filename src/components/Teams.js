@@ -15,11 +15,17 @@ class Teams extends Component {
                             <div key={i}><b>{player}</b></div>
                         )}
 
-                        {!this.props.finalized ? (
-                            <div className="tag is-dark">{this.props.teams[0].elo}</div>
-                        ) : (
-                            <div className={"tag" + (this.props.teams[0].eloChange > 0 ? " is-success" : " is-danger")}>{this.props.teams[0].eloChange}</div>
-                        )}
+                        <div class="has-addons">
+                            <div class="tag is-dark">{this.props.teams[0].elo}</div>
+                            {this.props.finalized && (
+                                <div className={"tag" + (this.props.teams[0].eloChange > 0 ? " has-text-success" : " has-text-danger")}>
+                                    {this.props.teams[0].eloChange > 0 && (
+                                        <span>+</span>
+                                    )}
+                                    {this.props.teams[0].eloChange}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="tile is-parent">
@@ -39,11 +45,17 @@ class Teams extends Component {
                             <div key={i}><b>{player}</b></div>
                         )}
 
-                        {!this.props.finalized ? (
-                            <div className="tag is-dark">{this.props.teams[1].elo}</div>
-                        ) : (
-                            <div className={"tag" + (this.props.teams[1].eloChange > 0 ? " is-success" : " is-danger")}>{this.props.teams[1].eloChange}</div>
-                        )}
+                        <div class="has-addons">
+                            <div class="tag is-dark">{this.props.teams[1].elo}</div>
+                            {this.props.finalized && (
+                                <div className={"tag" + (this.props.teams[1].eloChange > 0 ? " has-text-success" : " has-text-danger")}>
+                                    {this.props.teams[1].eloChange > 0 && (
+                                        <span>+</span>
+                                    )}
+                                    {this.props.teams[1].eloChange}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
