@@ -11,9 +11,9 @@ import firebase from "./utils/firebase"
 import Elo from "elo-js"
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand } from '@fortawesome/free-solid-svg-icons'
+import { faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand, faCircle } from '@fortawesome/free-solid-svg-icons'
 
-library.add([faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand])
+library.add([faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand, faCircle])
 
 class App extends Component {
     render() {
@@ -111,6 +111,10 @@ class App extends Component {
     };
 
     generateData = () => {
+        if (!this.state.matchesSnapshot) {
+            return
+        }
+
         const matches = Object.keys(this.state.matchesSnapshot).map(key => ({
             ...this.state.matchesSnapshot[key],
             key
@@ -206,6 +210,24 @@ class App extends Component {
 
                 match.teams[0].eloChange = teams[teamOneKey].elo - match.teams[0].elo
                 match.teams[1].eloChange = teams[teamTwoKey].elo - match.teams[1].elo
+            } else {
+                match.teams[0].eloIfWins = elo.ifWins(
+                    match.teams[0].elo,
+                    match.teams[1].elo
+                );
+                match.teams[0].eloIfLoses = elo.ifLoses(
+                    match.teams[0].elo,
+                    match.teams[1].elo
+                );
+
+                match.teams[1].eloIfWins = elo.ifWins(
+                    match.teams[1].elo,
+                    match.teams[0].elo
+                );
+                match.teams[1].eloIfLoses = elo.ifLoses(
+                    match.teams[1].elo,
+                    match.teams[0].elo
+                );
             }
         });
 

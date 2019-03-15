@@ -9,3 +9,97 @@
 .matches .match-item .tile {
   justify-content: center;
 }
+
+.match.full-screen {
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 30;
+}
+
+.match.full-screen .news-line {
+  background-color: #141516;
+  border: solid 2px #222428;
+  color: #ffffff;
+  margin-bottom: 4rem !important;
+}
+
+.match.full-screen .news-line span.divider {
+  margin: 0 1rem;
+}
+
+.match.full-screen .live-match-tag svg {
+    height: 0.5rem;
+    margin-right: 0.35rem;
+}
+
+.match.full-screen .team-score {
+  font-size: 14rem;
+  line-height: 14rem;
+  padding: 3rem 0;
+  position: relative;
+  width: 24rem;
+
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.match.full-screen .team-score-delimiter {
+  width: 4rem;
+}
+
+.match.full-screen .team-score-button {
+  cursor: pointer;
+  padding: 0.5rem;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.match.full-screen .team-players {
+  font-size: 3rem;
+}
+
+.team-score {
+  font-size: 2em;
+}
+
+.team-score .team-score-item {
+    cursor: default;
+    height: 100%;
+
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 4rem;
+}
+
+.team-score .team-score-item.active.editable {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.team-wrapper .tile {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}

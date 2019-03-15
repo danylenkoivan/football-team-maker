@@ -2,11 +2,14 @@
 
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-$family-sans-serif: 'Roboto', sans-serif;
+$family-primary: 'Roboto', sans-serif;
+
 
 $green: #417505;
 $red: #d0021b;
 $blue: #4a90e2;
+$dark: #151b21;
+$info: #4a90e2;
 
 
 @import "node_modules/bulma/sass/utilities/_all.sass";
