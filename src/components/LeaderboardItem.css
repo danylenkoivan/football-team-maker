@@ -43,15 +43,11 @@
   padding: 0.1rem 1rem;
 }
 
-.leaderboard-item.featured .leaderboard-item-cell {
-  padding: 0.5rem 1rem;
-}
-
 .leaderboard-item .leaderboard-item-cell-label {
   font-size: 1rem;
   font-weight: normal;
 }
 
-.leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-scored, .leaderboard-item .leaderboard-item-cell .leaderboard-item-cell-goal-stats-missed {
+.leaderboard-item .leaderboard-item-cell .leaderboard-item-goal-scored, .leaderboard-item .leaderboard-item-cell .leaderboard-item-goal-missed {
   font-size: 0.6rem;
 }

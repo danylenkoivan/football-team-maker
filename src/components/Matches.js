@@ -14,10 +14,7 @@ class Matches extends Component {
                 <div className="column is-11 is-offset-1 has-text-centered" id="matches">
                     <div className="matches" id="matches">
                         {this.props.matches.length === 0 ? (
-                            <div>
-                                <p>Couldn't find any...</p>
-                                <img className="" src="https://media.giphy.com/media/5j4wozAB0iC4w/giphy.gif" alt="" />
-                            </div>
+                            <div>No matches so far</div>
                         ) : (
                             <div>
                                 {this.props.matches.slice().reverse().splice(0, (this.state.showAll ? this.props.matches.length : defaultMatchesShownCount)).map((match, i) =>

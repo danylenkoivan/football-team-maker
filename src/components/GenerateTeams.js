@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import firebase from '../utils/firebase';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import './GenerateTeams.css';
 
 class GenerateTeams extends Component {
@@ -12,11 +10,8 @@ class GenerateTeams extends Component {
                 {this.props.canEdit === true &&
                     <div className="columns">
                         <div className="column has-text-centered">
-                            {this.props.players.map((player, i) =>
-                                <div key={i} className={"player-item button " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "is-dark" : "is-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
-                            )}
-                            {this.state.newPlayers.map((player, i) =>
-                                <div key={i} className={"player-item button " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "is-dark" : "is-light")} data-player={player} onClick={this.togglePlayer.bind(this)}>{player}</div>
+                            {this.props.players.concat(this.state.newPlayers).map((player, i) =>
+                                <div key={i} className={"player-item button " + (this.state.signedUpPlayers.indexOf(player) > -1 ? "is-dark" : "is-light")} onClick={this.togglePlayer.bind(this, player)}>{player}</div>
                             )}
 
                             <div className="field has-addons">
@@ -24,13 +19,11 @@ class GenerateTeams extends Component {
                                     <input type="text" className="input" placeholder="New player" onChange={this.newPlayerNameChange.bind(this)} value={this.state.newPlayerName} />
                                 </div>
                                 <div className="control">
-                                    <a className="button is-dark" onClick={this.addNewPlayer.bind(this)}><FontAwesomeIcon icon="plus" /></a>
+                                    <button className="button is-dark" id="add-new-player-button" onClick={this.addNewPlayer.bind(this)}>Add</button>
                                 </div>
                             </div>
 
-                            <div className="button is-dark is-fullwidth" onClick={this.generateTeams.bind(this)}>
-                                <span>Start match</span>
-                            </div>
+                            <div className="button is-dark is-fullwidth" id="generate-teams-button" onClick={this.generateTeams.bind(this)}>Start match</div>
                         </div>
                     </div>
                 }
@@ -52,9 +45,7 @@ class GenerateTeams extends Component {
         this.setState({newPlayerName: e.target.value});
     }
 
-    addNewPlayer(e) {
-        e.preventDefault()
-
+    addNewPlayer() {
         let players = this.state.newPlayers;
 
         players.push(this.state.newPlayerName.toUpperCase())
@@ -65,58 +56,57 @@ class GenerateTeams extends Component {
         })
     }
 
-    togglePlayer(e) {
+    togglePlayer(player) {
         let signedUpPlayers = this.state.signedUpPlayers
 
-        let playerName = e.target.dataset.player
-
-        let index = signedUpPlayers.indexOf(playerName)
+        let index = signedUpPlayers.indexOf(player)
 
         if (index > -1) {
             signedUpPlayers.splice(index, 1);
         } else {
-            signedUpPlayers.push(playerName)
+            signedUpPlayers.push(player)
         }
 
         this.setState({signedUpPlayers: signedUpPlayers})
     }
 
-    generateTeams(e) {
-        e.preventDefault();
+    generateTeams() {
+        let playersList = this.state.signedUpPlayers;
 
-        if (this.props.canEdit) {
-            let playersList = this.state.signedUpPlayers;
+        playersList = playersList.map(function (el) {
+            return el.trim();
+        });
 
-            playersList = playersList.map(function (el) {
-                return el.trim();
-            });
+        if (playersList.length >= 4) {
 
-            if (playersList.length >= 4) {
-                for (let i = playersList.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [playersList[i], playersList[j]] = [playersList[j], playersList[i]];
-                }
+            firebase.database().ref("matches").push({
+                teams: this.getTeams(playersList),
+                created: new Date().getTime()
+            })
 
-                let teams = []
-
-                for (let i = 0; i < playersList.length; i += 2) {
-                    teams.push({
-                        players: playersList.slice(i, i + 2),
-                        score: 0
-                    });
-                }
-
-                firebase.database().ref("matches").push({
-                    teams: teams.slice(0, 2),
-                    created: new Date().getTime()
-                })
-
-                this.setState({
-                    signedUpPlayers: [],
-                    newPlayers: []
-                })
-            }
+            this.setState({
+                signedUpPlayers: [],
+                newPlayers: []
+            })
         }
+    }
+
+    getTeams(players) {
+        for (let i = players.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [players[i], players[j]] = [players[j], players[i]];
+        }
+
+        let teams = []
+
+        for (let i = 0; i < players.length; i += 2) {
+            teams.push({
+                players: players.slice(i, i + 2),
+                score: 0
+            });
+        }
+
+        return teams.slice(0, 2);
     }
 }
 

@@ -7,13 +7,9 @@ import GenerateTeams from "./components/GenerateTeams"
 import Matches from "./components/Matches"
 import Leaderboard from "./components/Leaderboard"
 import firebase from "./utils/firebase"
+import {generateTeamName} from "./utils/utils"
 
 import Elo from "elo-js"
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand, faCircle } from '@fortawesome/free-solid-svg-icons'
-
-library.add([faTrophy, faMedal, faPlus, faPowerOff, faRedo, faExpand, faCircle])
 
 class App extends Component {
     render() {
@@ -148,17 +144,9 @@ class App extends Component {
 
         var teams = {};
         matches.forEach(match => {
-            let teamOneKey = match.teams[0].players
-                .sort()
-                .join(" - ")
-                .toUpperCase()
-                .trim();
+            let teamOneKey = generateTeamName(match.teams[0].players);
 
-            let teamTwoKey = match.teams[1].players
-                .sort()
-                .join(" - ")
-                .toUpperCase()
-                .trim();
+            let teamTwoKey = generateTeamName(match.teams[1].players);
 
             teams[teamOneKey] = teams[teamOneKey] || {
                 goalsPlus: 0,
