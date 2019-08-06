@@ -1,54 +1,83 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Match from './Match';
+import { withStyles } from "@material-ui/core/styles";
 
-import './Matches.css';
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+
+import Match from "./Match";
+
+const styles = theme => ({
+  showMoreMatchesButton: {
+    ...theme.mixins.gutters(),
+    marginTop: theme.spacing.unit
+  }
+});
 
 class Matches extends Component {
+  render() {
+    const defaultMatchesShownCount = 24;
 
-    render() {
-        const defaultMatchesShownCount = 3;
+    return (
+      <div>
+        {this.props.matches.length === 0 ? (
+          <Grid container justify="center">
+            <Grid item>
+              <Typography align="center">No matches yet</Typography>
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container spacing={16} justify="flex-start">
+            {this.props.matches
+              .slice()
+              .reverse()
+              .splice(
+                0,
+                this.state.showAll
+                  ? this.props.matches.length
+                  : defaultMatchesShownCount
+              )
+              .map((match, i) => (
+                <Grid item key={i}>
+                  <Match match={match} key={i} canEdit={this.props.canEdit} />
+                </Grid>
+              ))}
+          </Grid>
+        )}
+        {this.props.matches.length > defaultMatchesShownCount && (
+          <Grid container justify="center">
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                className={this.props.classes.showMoreMatchesButton}
+                onClick={this.toggleMatchesShown.bind(this)}
+              >
+                {this.state.showAll ? (
+                  <span>Show less matches</span>
+                ) : (
+                  <span>Show more matches</span>
+                )}
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+      </div>
+    );
+  }
 
-        return (
-            <div className="columns">
-                <div className="column is-11 is-offset-1 has-text-centered" id="matches">
-                    <div className="matches" id="matches">
-                        {this.props.matches.length === 0 ? (
-                            <div>No matches so far</div>
-                        ) : (
-                            <div>
-                                {this.props.matches.slice().reverse().splice(0, (this.state.showAll ? this.props.matches.length : defaultMatchesShownCount)).map((match, i) =>
-                                    <Match match={match} key={i} canEdit={this.props.canEdit} />
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    {this.props.matches.length > defaultMatchesShownCount && (
-                        <div className="button is-outlined is-uppercase has-text-info" onClick={this.toggleMatchesShown.bind(this)}>
-                            {this.state.showAll ? (
-                                <span>Show less matches</span>
-                            ) : (
-                                <span>Show more matches</span>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
-    }
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props)
+    this.state = {
+      showAll: false
+    };
+  }
 
-        this.state = {
-            showAll: false
-        }
-    }
-
-    toggleMatchesShown() {
-        this.setState({showAll: !this.state.showAll})
-    }
-
+  toggleMatchesShown() {
+    this.setState({ showAll: !this.state.showAll });
+  }
 }
 
-export default Matches;
+export default withStyles(styles)(Matches);

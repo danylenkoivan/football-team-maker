@@ -1,28 +1,19 @@
 @charset "utf-8";
 
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 
-$family-primary: 'Roboto', sans-serif;
+body {
+  margin: 0;
+  padding-right: 0 !important;
+}
 
+@keyframes ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+  }
 
-$green: #417505;
-$red: #d0021b;
-$blue: #4a90e2;
-$dark: #151b21;
-$info: #4a90e2;
-
-
-@import "node_modules/bulma/sass/utilities/_all.sass";
-@import "node_modules/bulma/sass/base/_all.sass";
-@import "node_modules/bulma/sass/elements/button.sass";
-@import "node_modules/bulma/sass/elements/container.sass";
-@import "node_modules/bulma/sass/elements/form.sass";
-@import "node_modules/bulma/sass/elements/title.sass";
-@import "node_modules/bulma/sass/components/navbar.sass";
-@import "node_modules/bulma/sass/layout/hero.sass";
-@import "node_modules/bulma/sass/layout/section.sass";
-@import "node_modules/bulma/bulma.sass";
-
-.main-content {
-  margin-top: 4rem;
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
 }

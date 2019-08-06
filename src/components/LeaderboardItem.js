@@ -1,83 +1,132 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import './LeaderboardItem.css';
+import classNames from "classnames";
+import { withStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrophy, faMedal } from '@fortawesome/free-solid-svg-icons'
+import LooksOneIcon from "@material-ui/icons/LooksOne";
+import LooksTwoIcon from "@material-ui/icons/LooksTwo";
+import Looks3Icon from "@material-ui/icons/Looks3";
 
-library.add([faTrophy, faMedal])
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    fontSize: "1.5rem",
+    lineHeight: "2rem",
+    marginBottom: "0.5rem",
+    marginTop: "0.5rem",
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    width: "100%"
+  },
+  leaderboardItemCenteredContainer: {
+    textAlign: "center"
+  },
+  placeIcon: {
+    fontSize: "2rem",
+    verticalAlign: "middle"
+  },
+  firstPlaceIcon: {
+    color: "#ffe082"
+  },
+  secondPlaceIcon: {
+    color: "#c5cae9",
+    fontSize: "2rem"
+  },
+  thirdPlaceIcon: {
+    color: "#ceb1a1",
+    fontSize: "2rem"
+  },
+
+  victoryPoints: {
+    color: theme.palette.matchResultColors.victory
+  },
+  lossPoints: {
+    color: theme.palette.matchResultColors.loss
+  }
+});
 
 class LeaderboardItem extends Component {
-    render() {
-        return (
-            <div className={"columns is-vcentered leaderboard-item leaderboard-item-" + this.props.index + (this.props.index === 1 ? " featured has-background-light" : "")}>
-                <div className="column is-1 leaderboard-item-position has-text-centered">
-                    {this.props.index === 1 && (
-                        <FontAwesomeIcon icon="trophy" />
-                    )}
-                    {this.props.index === 2 && (
-                        <FontAwesomeIcon icon="medal" />
-                    )}
-                    {this.props.index === 3 && (
-                        <FontAwesomeIcon icon="medal" />
-                    )}
-                    {this.props.index > 3 && (
-                        <span>{this.props.index}</span>
-                    )}
-                </div>
-                <div className="column is-1">
-                    <span className="tag is-dark leaderboard-item-score">{this.props.team.elo}</span>
-                </div>
-                <div className="column is-3 leaderboard-item-key">
-                    {this.props.team.key}
-                </div>
-                <div className="column is-7">
-                    <div className="leaderboard-item-cell tile is-ancestor is-vertical has-text-success">
-                        {this.props.index === 1 && (
-                            <div className="tile leaderboard-item-cell-label">
-                                Won
-                            </div>
-                        )}
-                        <div className="tile leaderboard-item-won">
-                            {this.props.team.won}
-                        </div>
-                    </div>
-                    <div className="leaderboard-item-cell tile is-ancestor is-vertical has-text-centered has-text-danger">
-                        {this.props.index === 1 && (
-                            <div className="tile leaderboard-item-cell-label">
-                                Lost
-                            </div>
-                        )}
-                        <div className="tile leaderboard-item-lost">
-                            {this.props.team.lost}
-                        </div>
-                    </div>
-                    <div className="leaderboard-item-cell leaderboard-item-goals tile is-ancestor is-vertical has-text-centered">
-
-                        {this.props.index === 1 && (
-                            <div className="tile leaderboard-item-cell-label">
-                                Goals
-                            </div>
-                        )}
-                        <div className="tile">
-                            <div className="tile leaderboard-item-goal-difference">
-                                {(this.props.team.goalsPlus - this.props.team.goalsMinus).toString()}
-                            </div>
-                            <div className="tile is-vertical">
-                                <div className="tile leaderboard-item-goal-scored has-text-success">
-                                    + {this.props.team.goalsPlus}
-                                </div>
-                                <div className="tile leaderboard-item-goal-missed has-text-danger">
-                                    - {this.props.team.goalsMinus}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <Grid container className={this.props.classes.root}>
+        <Grid
+          item
+          xs={2}
+          className={this.props.classes.leaderboardItemCenteredContainer}
+        >
+          {this.props.index === 1 && (
+            <LooksOneIcon
+              className={classNames(
+                this.props.classes.placeIcon,
+                this.props.classes.firstPlaceIcon
+              )}
+            />
+          )}
+          {this.props.index === 2 && (
+            <LooksTwoIcon
+              className={classNames(
+                this.props.classes.placeIcon,
+                this.props.classes.secondPlaceIcon
+              )}
+            />
+          )}
+          {this.props.index === 3 && (
+            <Looks3Icon
+              className={classNames(
+                this.props.classes.placeIcon,
+                this.props.classes.thirdPlaceIcon
+              )}
+            />
+          )}
+          {this.props.index > 3 && (
+            <Typography inline>{this.props.index}</Typography>
+          )}
+        </Grid>
+        <Grid item xs={4}>
+          <Typography inline>
+            <b>{this.props.team.key}</b>
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          className={this.props.classes.leaderboardItemCenteredContainer}
+        >
+          <Typography inline>
+            <b>{this.props.team.elo}</b>
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          className={this.props.classes.leaderboardItemCenteredContainer}
+        >
+          <Typography inline className={this.props.classes.victoryPoints}>
+            {this.props.team.won}
+          </Typography>
+          <Typography inline> - </Typography>
+          <Typography inline className={this.props.classes.lossPoints}>
+            {this.props.team.lost}
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={2}
+          className={this.props.classes.leaderboardItemCenteredContainer}
+        >
+          <Typography inline className={this.props.classes.victoryPoints}>
+            {this.props.team.goalsPlus}
+          </Typography>
+          <Typography inline> - </Typography>
+          <Typography inline className={this.props.classes.lossPoints}>
+            {this.props.team.goalsMinus}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
 }
 
-export default LeaderboardItem;
+export default withStyles(styles)(LeaderboardItem);

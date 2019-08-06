@@ -6,6 +6,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/react-fontawesome": "^0.1.3",
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
     "bulma": "^0.7.4",
     "elo-js": "^1.0.1",
     "firebase": "^5.2.0",
